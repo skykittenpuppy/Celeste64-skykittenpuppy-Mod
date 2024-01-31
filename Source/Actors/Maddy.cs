@@ -27,33 +27,11 @@ public class Maddy : NPC
             Nodes = 10
         };
 
-        InteractHoverOffset = new Vec3(0, -2, 16);
+		Model.Transform = Matrix.CreateScale(3) * Matrix.CreateTranslation(0, 0, -1.5f);
+		InteractHoverOffset = new Vec3(0, -2, 16);
 		InteractRadius = 32;
 		CheckForDialog();
 	}
-
-    public override void Update()
-    {
-        base.Update();
-		
-		// update model
-		Model.Transform = 
-			Matrix.CreateScale(3) * 
-			Matrix.CreateTranslation(0, 0, MathF.Sin(World.GeneralTimer * 2) * 1.0f - 1.5f);
-
-		// update hair
-		{
-			var hairMatrix = Matrix.Identity;
-			foreach (var it in Model.Instance.Armature.LogicalNodes)
-				if (it.Name == "Head")
-					hairMatrix = it.ModelMatrix * SkinnedModel.BaseTranslation * Model.Transform * Matrix;
-			hair.Flags = Model.Flags;
-			hair.Forward = -new Vec3(Facing, 0);
-			hair.Materials[0].Effects = 0;
-			hair.Update(hairMatrix);
-		}
-		
-    }
 
     public override void Interact(Player player)
 	{
@@ -66,7 +44,7 @@ public class Maddy : NPC
 		yield return Co.Run(cs.FaceEachOther(World.Get<Player>(), this));
 
 		int index = Save.CurrentRecord.GetFlag(TALK_FLAG) + 1;
-		yield return Co.Run(cs.Say(Assets.Dialog[$"Baddy{index}"]));
+		yield return Co.Run(cs.Say(Assets.Dialog[$"Maddy{index}"]));
 		Save.CurrentRecord.IncFlag(TALK_FLAG);
 		CheckForDialog();
 	}
@@ -79,7 +57,7 @@ public class Maddy : NPC
 
 	private void CheckForDialog()
 	{ 
-		InteractEnabled = Assets.Dialog.ContainsKey($"Baddy{Save.CurrentRecord.GetFlag(TALK_FLAG) + 1}");
+		InteractEnabled = Assets.Dialog.ContainsKey($"Maddy{Save.CurrentRecord.GetFlag(TALK_FLAG) + 1}");
 	}
 }
 

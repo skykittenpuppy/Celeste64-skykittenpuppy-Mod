@@ -66,11 +66,11 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 	private const float FeatherExitXYMult = .5f;
 	private const float FeatherExitZSpeed = 60;
 
-	static private readonly Color CNormal = 0xdb2c00;
-	static private readonly Color CNoDash = 0x6ec0ff;
-	static private readonly Color CTwoDashes = 0xfa91ff;
-	static private readonly Color CRefillFlash = Color.White;
-	static private readonly Color CFeather = 0xf2d450;
+	static private Color CNormal = 0x452318;
+	static private Color CNoDash = 0x4769ae;
+	static private Color CTwoDashes = 0x70433a;
+	static private Color CFeather = 0xf2d450;
+	static private Color CRefillFlash = Color.White;
 
 	#endregion
 
@@ -84,9 +84,9 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 		public float Percent;
 		public Color Color;
 
-		public Trail()
+		public Trail(string modelName, bool hasHair)
 		{
-			Model = new(Assets.Models["player"]);
+			Model = new(Assets.Models[modelName]);
 			Model.Flags = ModelFlags.Transparent;
 			Model.MakeMaterialsUnique();
 			foreach (var mat in Model.Materials)
@@ -94,6 +94,8 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 				mat.Texture = Assets.Textures["white"];
 				mat.Effects = 0;
 			}
+
+			if (!hasHair) return;
 
 			Hair = new();
 			foreach (var mat in Hair.Materials)
@@ -188,15 +190,20 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 		&& stateMachine.State != States.Cassette
 		&& stateMachine.State != States.Dead;
 
-	public Player()
+	private string ModelName = "maddy";
+	private bool HasHair = true;
+
+	public Player(string modelName, bool hasHair)
 	{
+		ModelName = modelName;
+		HasHair = hasHair;
 		PointShadowAlpha = 1.0f;
 		LocalBounds = new BoundingBox(new Vec3(0, 0, 10), 10);
 		UpdateOffScreen = true;
 
 		// setup model
 		{
-			Model = new(Assets.Models["player"]);
+			Model = new(Assets.Models[ModelName]);
 			Model.SetBlendDuration("Idle", "Dash", 0.05f);
 			Model.SetBlendDuration("Idle", "Run", 0.2f);
 			Model.SetBlendDuration("Run", "Skid", .125f);
@@ -1229,7 +1236,7 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 
 	private bool TryDash()
 	{
-		if (dashes > 0 && tDashCooldown <= 0 && Controls.Dash.ConsumePress())
+		if ((true || dashes > 0) && tDashCooldown <= 0 && Controls.Dash.ConsumePress())
 		{
 			dashes--;
 			stateMachine.State = States.Dashing;
@@ -1317,10 +1324,10 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 				break;
 			}
 		if (trail == null)
-			trails.Add(trail = new());
+			trails.Add(trail = new(ModelName, HasHair));
 
 		trail.Model.SetBlendedWeights(Model.GetBlendedWeights());
-		trail.Hair.CopyState(Hair);
+		if (HasHair) trail.Hair.CopyState(Hair);
 		trail.Percent = 0.0f;
 		trail.Transform = Model.Transform * Matrix;
 		trail.Color = lastDashHairColor;
@@ -2203,7 +2210,7 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 	{
 		if ((World.Camera.Position - (Position + Vec3.UnitZ * 8)).LengthSquared() > World.Camera.NearPlane * World.Camera.NearPlane)
 		{
-			if (drawHair)
+			if (HasHair && drawHair)
 				populate.Add((this, Hair));
 
 			if (drawModel)
@@ -2220,13 +2227,13 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 
 			foreach (var mat in trail.Model.Materials)
 				mat.Color = trail.Color * alpha;
-			trail.Hair.Color = trail.Color * alpha;
+			if (HasHair) trail.Hair.Color = trail.Color * alpha;
 
 			if (Matrix.Invert(Matrix, out var inverse))
 				trail.Model.Transform = trail.Transform * inverse;
 
 			populate.Add((this, trail.Model));
-			populate.Add((this, trail.Hair));
+			if (HasHair) populate.Add((this, trail.Hair));
 		}
 	}
 

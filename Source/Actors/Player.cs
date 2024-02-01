@@ -1909,7 +1909,8 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 	private void StRespawnExit()
 	{
 		PointShadowAlpha = 1;
-		drawModel = drawHair = HasHair;
+		drawModel = true;
+		drawHair = HasHair;
 		drawOrbs = false;
 	}
 
@@ -2143,7 +2144,8 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 	{
 		cassette?.SetCooldown();
 		cassette = null;
-		drawModel = drawHair = HasHair;
+		drawModel = true;
+		drawHair = HasHair;
 		cameraOverride = null;
 		PointShadowAlpha = 1;
 	}

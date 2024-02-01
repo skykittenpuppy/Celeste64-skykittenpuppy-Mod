@@ -33,6 +33,23 @@ public class Maddy : NPC
 		CheckForDialog();
 	}
 
+    public override void Update()
+    {
+        base.Update();
+
+		// update hair
+		{
+			var hairMatrix = Matrix.Identity;
+			foreach (var it in Model.Instance.Armature.LogicalNodes)
+				if (it.Name == "Head")
+					hairMatrix = it.ModelMatrix * SkinnedModel.BaseTranslation * Model.Transform * Matrix;
+			hair.Flags = Model.Flags;
+			hair.Forward = -new Vec3(Facing, 0);
+			hair.Materials[0].Effects = 0;
+			hair.Update(hairMatrix);
+		}
+    }
+
     public override void Interact(Player player)
 	{
 		World.Add(new Cutscene(Conversation));

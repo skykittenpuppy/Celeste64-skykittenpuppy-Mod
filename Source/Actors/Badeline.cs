@@ -54,7 +54,6 @@ public class Badeline : NPC
 			hair.Materials[0].Effects = 0;
 			hair.Update(hairMatrix);
 		}
-		
     }
 
     public override void Interact(Player player)

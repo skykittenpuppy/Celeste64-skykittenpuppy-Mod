@@ -6,7 +6,7 @@ namespace Celeste64;
 public class World : Scene
 {
 	public enum EntryReasons { Entered, Returned, Respawned }
-	public readonly record struct EntryInfo(string Map, string CheckPoint, bool Submap, EntryReasons Reason);
+	public readonly record struct EntryInfo(string Map, string CheckPoint, bool Submap, string PlayerModel, bool PlayerHairTrail, int[] PlayerHairColours, string Collectible, EntryReasons Reason);
 
 	public Camera Camera = new();
 	public Rng Rng = new(0);
@@ -170,6 +170,7 @@ public class World : Scene
 		instance.Destroying = false;
 		instance.SetWorld(this);
 		instance.Created();
+		if (instance is Player player) player.SetModel(Entry);
 		return instance;
 	}
 
@@ -797,8 +798,13 @@ public class World : Scene
 					batch.PushMatrix(
 						Matrix3x2.CreateTranslation(0, -UI.IconSize / 2) * 
 						Matrix3x2.CreateScale(wiggle) * 
+<<<<<<< HEAD
 						Matrix3x2.CreateTranslation(at + new Vec2(-60 * (1 - Ease.Cube.Out(strawbCounterEase)), UI.IconSize / 2)));
 					UI.Strawberries(batch, Save.CurrentRecord.Strawberries.Count, Vec2.Zero);
+=======
+						Matrix3x2.CreateTranslation(at + new Vec2(-60 * (1 - Ease.CubeOut(strawbCounterEase)), UI.IconSize / 2)));
+					UI.Strawberries(batch, Save.CurrentRecord.Strawberries.Count, Entry.Collectible, Vec2.Zero);
+>>>>>>> 0cc62d7 (Player model now defined by Levels.json)
 					batch.PopMatrix();
 				}
 

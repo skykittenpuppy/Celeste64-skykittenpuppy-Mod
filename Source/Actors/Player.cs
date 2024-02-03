@@ -78,9 +78,9 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 		public float Percent;
 		public Color Color;
 
-		public Trail(string modelName)
+		public Trail(SkinnedModel model)
 		{
-			Model = new(Assets.Models[modelName]);
+			Model = new(model.Template);
 			Model.Flags = ModelFlags.Transparent;
 			Model.MakeMaterialsUnique();
 			foreach (var mat in Model.Materials)
@@ -182,40 +182,12 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 		&& stateMachine.State != States.Cassette
 		&& stateMachine.State != States.Dead;
 
-	static private string ModelName = "maddy";
-	static private bool HasHair;
-	static private Color CNormal;
-	static private Color CNoDash;
-	static private Color CTwoDashes;
-	static private Color CFeather;
-	static private Color CRefillFlash = Color.White;
-
-	public Player(string modelName, bool hasHair, int hairCol0, int hairCol1, int hairCol2, int hairColF)
+	//(This is fine)
+	public Player()
 	{
-		ModelName = modelName;
-		HasHair = drawHair = hasHair;
-		CNoDash = hairCol0;
-		CNormal = hairCol1;
-		CTwoDashes = hairCol2;
-		CFeather = hairColF;
-
 		PointShadowAlpha = 1.0f;
 		LocalBounds = new BoundingBox(new Vec3(0, 0, 10), 10);
 		UpdateOffScreen = true;
-
-		// setup model
-		{
-			Model = new(Assets.Models[ModelName]);
-			Model.SetBlendDuration("Idle", "Dash", 0.05f);
-			Model.SetBlendDuration("Idle", "Run", 0.2f);
-			Model.SetBlendDuration("Run", "Skid", .125f);
-			Model.SetLooping("Dash", false);
-			Model.Flags |= ModelFlags.Silhouette;
-			Model.Play("Idle");
-
-			foreach (var mat in Model.Materials)
-				mat.Effects = 0.60f;
-		}
 
 		stateMachine = new();
 		stateMachine.InitState(States.Normal, StNormalUpdate, StNormalEnter, StNormalExit);
@@ -236,8 +208,34 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 		{
 			return Vec3.Dot(velocity.Normalized(), spike.Direction) < 0.5f;
 		};
+	}
+	
+	static private bool HasHairTrail = true;
+	static private Color CFeather = Color.Black;
+	static private Color CNoDash = Color.Black;
+	static private Color CNormal = Color.Black;
+	static private Color CTwoDashes = Color.Black;
+	static private Color CRefillFlash = Color.White;
+	public void SetModel(World.EntryInfo entry){
+		drawHair = HasHairTrail = entry.PlayerHairTrail;
+		CFeather = entry.PlayerHairColours[0];
+		CNoDash = entry.PlayerHairColours[1];
+		CNormal = entry.PlayerHairColours[2];
+		CTwoDashes = entry.PlayerHairColours[3];
 
-		SetHairColor(0xdb2c00);
+		// setup model
+		{
+			Model = new(Assets.Models[entry.PlayerModel]);
+			Model.SetBlendDuration("Idle", "Dash", 0.05f);
+			Model.SetBlendDuration("Idle", "Run", 0.2f);
+			Model.SetBlendDuration("Run", "Skid", .125f);
+			Model.SetLooping("Dash", false);
+			Model.Flags |= ModelFlags.Silhouette;
+			Model.Play("Idle");
+
+			foreach (var mat in Model.Materials)
+				mat.Effects = 0.60f;
+		}
 	}
 
 	#region Added / Update
@@ -1238,7 +1236,7 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 
 	private bool TryDash()
 	{
-		if ((true || dashes > 0) && tDashCooldown <= 0 && Controls.Dash.ConsumePress())
+		if ((dashes > 0) && tDashCooldown <= 0 && Controls.Dash.ConsumePress())
 		{
 			dashes--;
 			stateMachine.State = States.Dashing;
@@ -1326,7 +1324,7 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 				break;
 			}
 		if (trail == null)
-			trails.Add(trail = new(ModelName));
+			trails.Add(trail = new(Model));
 
 		trail.Model.SetBlendedWeights(Model.GetBlendedWeights());
 		trail.Hair.CopyState(Hair);
@@ -1818,7 +1816,7 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 	{
 		Hair.Roundness = 0;
 		drawModel = true;
-		drawHair = HasHair;
+		drawHair = HasHairTrail;
 		sfxFeather?.Stop();
 	}
 
@@ -1910,7 +1908,7 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 	{
 		PointShadowAlpha = 1;
 		drawModel = true;
-		drawHair = HasHair;
+		drawHair = HasHairTrail;
 		drawOrbs = false;
 	}
 
@@ -2119,7 +2117,9 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 				Game.Instance.Goto(new Transition()
 				{
 					Mode = Transition.Modes.Push,
-					Scene = () => new World(new(cassette.Map, string.Empty, true, World.EntryReasons.Entered)),
+					Scene = () => new World(new(cassette.Map, string.Empty, true,
+						World.Entry.PlayerModel, World.Entry.PlayerHairTrail, World.Entry.PlayerHairColours, World.Entry.Collectible,
+						World.EntryReasons.Entered)),
 					ToPause = true,
 					ToBlack = new SpotlightWipe(),
 					StopMusic = true
@@ -2145,7 +2145,7 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 		cassette?.SetCooldown();
 		cassette = null;
 		drawModel = true;
-		drawHair = HasHair;
+		drawHair = HasHairTrail;
 		cameraOverride = null;
 		PointShadowAlpha = 1;
 	}

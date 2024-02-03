@@ -12,6 +12,10 @@ public class LevelInfo
 	public string Name { get; set; } = string.Empty;
 	public string Label { get; set; } = string.Empty;
 	public int Strawberries { get; set; } = 0;
+	public string Collectible { get; set; } = string.Empty;
+	public string PlayerModel { get; set; } = "maddy";
+	public bool PlayerHairTrail { get; set; } = true;
+	public int[] PlayerHairColours { get; set; } = [];
 	public string Preview { get; set; } = string.Empty;
 	public string Map { get; set; } = string.Empty;
 
@@ -21,7 +25,7 @@ public class LevelInfo
 		Game.Instance.Goto(new Transition()
 		{
 			Mode = Transition.Modes.Replace,
-			Scene = () => new World(new(Map, Save.CurrentRecord.Checkpoint, false, World.EntryReasons.Entered)),
+			Scene = () => new World(new(Map, Save.CurrentRecord.Checkpoint, false, PlayerModel, PlayerHairTrail, PlayerHairColours, Collectible, World.EntryReasons.Entered)),
 			ToBlack = toBlack ?? new SpotlightWipe(),
 			FromBlack = new SpotlightWipe(),
 			StopMusic = true,

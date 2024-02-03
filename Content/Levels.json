@@ -4,6 +4,15 @@
 		"Name": "Forsaken City",
 		"Label": "Created for the 6th anniversary\nby the Celeste Team",
 		"Strawberries": 30,
+		"Collectible": "strawberry",
+		"PlayerModel": "maddy",
+		"PlayerHairTrail": true,
+		"PlayerHairColours": [
+			15914064,
+			7258367,
+			14363648,
+			16421375
+		],
 		"Preview": "Postcards/ForsakenCity",
 		"Map": "1"
 	},
@@ -12,7 +21,33 @@
 		"Name": "Datastream",
 		"Label": "Created for InTheLittlewood\nby SkyKittenPuppy!",
 		"Strawberries": 0,
+		"Collectible": "shard",
+		"PlayerModel": "martyn",
+		"PlayerHairTrail": false,
+		"PlayerHairColours": [
+			15914064,
+			4680110,
+			4530968,
+			7357242
+		],
 		"Preview": "Postcards/Datastream",
 		"Map": "2"
+	},
+	{
+		"ID": "0_FORSAKEN_CITY",
+		"Name": "Forsaken City (with theo!)",
+		"Label": "Created for the 6th anniversary\nby the Celeste Team",
+		"Strawberries": 30,
+		"Collectible": "strawberry",
+		"PlayerModel": "theo",
+		"PlayerHairTrail": false,
+		"PlayerHairColours": [
+			15914064,
+			4680110,
+			4530968,
+			7357242
+		],
+		"Preview": "Postcards/ForsakenCity",
+		"Map": "1"
 	}
 ]

@@ -13,28 +13,29 @@ public class Strawberry : Actor, IHaveModels, IHaveSprites, IPickup, ICastPointS
 		!string.IsNullOrEmpty(ID) && 
 		Save.CurrentRecord.Strawberries.Contains(ID);
 
-	public Color HaloColor = 0xeed14f;
 	public float PointShadowAlpha { get; set; } = 1.0f;
 
 	public bool IsLocked { get; private set; }
 	public readonly string ID;
 	public readonly string UnlockConditionGroup;
-	public readonly Vec3? BubbleTo;
 	public readonly bool PlayUnlockSound;
+	public readonly Vec3? BubbleTo;
+	public Color HaloColor;
 
 	private bool isCollecting = false;
 	private readonly List<Actor> unlockConditions = [];
 	private float checkConditionsOffset;
 	private float scaleMultiplier = 1;
 
-	public Strawberry(string id, bool isLocked, string? unlockCondition, bool unlockSound, Vec3? bubbleTo)
+	public Strawberry(string id, bool isLocked, string? unlockCondition, bool unlockSound, Vec3? bubbleTo, Color haloColor, string model)
 	{
 		ID = id;
 		IsLocked = isLocked;
 		UnlockConditionGroup = unlockCondition ?? string.Empty;
 		PlayUnlockSound = unlockSound;
 		BubbleTo = bubbleTo;
-		Model = new(Assets.Models["strawberry"]);
+		HaloColor = haloColor;
+		Model = new(Assets.Models[model]);
 		Model.Transform = Matrix.CreateScale(3);
 		Model.Materials[0].Effects = 0;
 		LocalBounds = new BoundingBox(Vec3.Zero, 10);

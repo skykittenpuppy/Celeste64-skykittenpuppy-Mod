@@ -105,8 +105,8 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 	private static Vec3 storedCameraForward;
 	private static float storedCameraDistance;
 
-	private enum States { Normal, Dashing, Skidding, Climbing, StrawbGet, FeatherStart, Feather, Respawn, Dead, StrawbReveal, Cutscene, Bubble, Cassette };
-	private enum Events { Land };
+	public enum States { Normal, Dashing, Skidding, Climbing, StrawbGet, FeatherStart, Feather, Respawn, Dead, StrawbReveal, Cutscene, Bubble, Cassette };
+	public enum Events { Land };
 
 	public bool Dead = false;
 
@@ -131,7 +131,7 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 	private Vec2 targetFacing = Vec2.UnitY;
 	private Vec3 cameraTargetForward = new(0, 1, 0);
 	private float cameraTargetDistance = 0.50f;
-	private readonly StateMachine<States, Events> stateMachine;
+	public readonly StateMachine<States, Events> stateMachine;
 
 	private record struct CameraOverride(Vec3 Position, Vec3 LookAt);
 	private CameraOverride? cameraOverride = null;
@@ -182,9 +182,8 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 		&& stateMachine.State != States.Cassette
 		&& stateMachine.State != States.Dead;
 
-	//(This is fine)
-	public Player()
-	{
+    public Player()
+    {
 		PointShadowAlpha = 1.0f;
 		LocalBounds = new BoundingBox(new Vec3(0, 0, 10), 10);
 		UpdateOffScreen = true;
@@ -761,6 +760,11 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 		var velXY = targetFacing * WallJumpXYSpeed;
 		velocity = velocity.WithXY(velXY);
 
+		if (climbingWallActor is IceWall) {
+			velocity.Z = Math.Min(velocity.Z, 45f);
+			tHoldJump = 0;
+		}
+
 		AddPlatformVelocity(false);
 		CancelGroundSnap();
 
@@ -901,6 +905,7 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 			Controls.Jump.ConsumePress();
 			Position += (hit.Pushout * (WallPushoutDist / ClimbCheckDist));
 			targetFacing = hit.Normal.XY().Normalized();
+			climbingWallActor = hit.Actor;
 			return true;
 		}
 		else
@@ -1439,7 +1444,9 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 	{
 		Model.Play("Climb.Idle", true);
 		Model.Rate = 1.8f;
-		velocity = Vec3.Zero;
+		if (!(climbingWallActor is IceWall)) {
+			velocity = Vec3.Zero;
+		}
 		climbCornerEase = 0;
 		climbInputSign = 1;
 		Audio.Play(Sfx.sfx_grab, Position);
@@ -1464,9 +1471,9 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 
 		if (Controls.Jump.ConsumePress())
 		{
-			stateMachine.State = States.Normal;
 			targetFacing = -targetFacing;
 			WallJump();
+			stateMachine.State = States.Normal;
 			return;
 		}
 
@@ -1500,6 +1507,10 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 			var up = -wallUp * inputTranslated.Y;
 			var move = side + up;
 
+			if (climbingWallActor is IceWall) {
+				velocity.Z = (velocity.Z * 0.9f) + (-90 * 0.1f);
+			}
+
 			// cancel down vector if we're on the ground
 			if (move.Z < 0 && GroundCheck(out _, out _, out _))
 				move.Z = 0;
@@ -1517,7 +1528,7 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 			if (MathF.Abs(move.X) < 0.1f) move.X = 0;
 			if (MathF.Abs(move.Y) < 0.1f) move.Y = 0;
 			if (MathF.Abs(move.Z) < 0.1f) move.Z = 0;
-
+			
 			if (move != Vec3.Zero)
 				SweepTestMove(move * ClimbSpeed * Time.Delta, false);
 

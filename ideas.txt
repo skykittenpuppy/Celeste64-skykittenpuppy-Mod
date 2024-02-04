@@ -1,0 +1,15 @@
+spinners
+ice-balls
+blue/red bubble
+conveyor walls
+blue/red cloud
+
+icey walls /
+dash blocks /
+
+dream blocks -
+
+key and lock ?
+buttons ?
+magma block ?
+bouncers ?

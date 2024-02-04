@@ -31,11 +31,17 @@
     name(string) : "Name" : "Start"
 ]
 
-@PointClass model({ "path": "Models/strawberry.glb", "scale": 12 }) = Strawberry : "Strawb Get!" 
+@PointClass model({ "path": "Models/strawberry.glb", "scale": 12 }) = Strawberry : "Strawb Get!"
 [
     locked(integer) : "Locked" : 0
     targetname(string) : "Target Name"
     bubbleto(string) : "Bubble To" : : "If assigned, Strawberry will bubble the player"
+]
+@PointClass model({ "path": "Models/shard.glb", "scale": 12 }) = Shard : "Shard Get!"
+[
+    locked(integer) : "Locked" : 0
+    targetname(string) : "Target Name"
+    bubbleto(string) : "Bubble To" : : "If assigned, will bubble the player"
 ]
 
 @PointClass model({ "path": "Models/granny.glb", "scale": 12 }) = Granny : "She cool" 
@@ -102,15 +108,21 @@
 [
     target(string) : "Target Node"
 ]
+@SolidClass = DashBlock : "Moves to the node when the player dashes"
+[
+    target(string) : "Target Node"
+]
 
 @SolidClass = FallingBlock : "Falls when player rides it"
 [
-   
 ]
 
-@SolidClass = FloatyBlock : "Moves when player lands on it"
+@SolidClass = FloatyBlock : "Moves when player lands on it" 
 [
-   
+]
+
+@SolidClass = IceWall : "Player slips when trying to climb" 
+[
 ]
 
 @SolidClass = GateBlock : "Opens when the player gets all the switches"

@@ -61,7 +61,7 @@ public class Maddy : NPC
 		yield return Co.Run(cs.FaceEachOther(World.Get<Player>(), this));
 
 		int index = Save.CurrentRecord.GetFlag(TALK_FLAG) + 1;
-		yield return Co.Run(cs.Say(Assets.Dialog[$"Maddy{index}"]));
+		yield return Co.Run(cs.Say(Loc.Lines($"Maddy{index}")));
 		Save.CurrentRecord.IncFlag(TALK_FLAG);
 		CheckForDialog();
 	}
@@ -74,7 +74,7 @@ public class Maddy : NPC
 
 	private void CheckForDialog()
 	{ 
-		InteractEnabled = Assets.Dialog.ContainsKey($"Maddy{Save.CurrentRecord.GetFlag(TALK_FLAG) + 1}");
+		InteractEnabled = Loc.HasLines($"Maddy{Save.CurrentRecord.GetFlag(TALK_FLAG) + 1}");
 	}
 }
 

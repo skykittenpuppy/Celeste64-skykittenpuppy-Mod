@@ -771,6 +771,76 @@
 				"Voice": "credits/credits_13",
 				"Text": "And lastly, thank you to Celeste players everywhere.\nYour love and passion for our little game\ncontinues to inspire us."
 			}
+		],
+
+		"SignDS-1": [
+			{
+				"Face": "signpost",
+				"Voice": "sign/general_01",
+				"Text": "Secret Sign\nDo NOT read"
+			},
+			{
+				"Face": "signpost",
+				"Voice": "sign/ellipses_01",
+				"Text": "..."
+			},
+			{
+				"Face": "signpost",
+				"Voice": "sign/general_03",
+				"Text": "But since you found me,\nhere's a tip:"
+			},
+			{
+				"Face": "signpost",
+				"Voice": "sign/general_02",
+				"Text": "The RIGHT ANALOG STICK controls the camera."
+			},
+			{
+				"Face": "signpost",
+				"Voice": "sign/ellipses_01",
+				"Text": "..."
+			},
+			{
+				"Face": "signpost",
+				"Voice": "sign/general_05",
+				"Text": "Look, I didn't say it was a GOOD tip."
+			},
+			{
+				"Face": "signpost",
+				"Voice": "sign/general_07",
+				"Text": "But be sure to try zooming in and out\nwith UP and DOWN on the RIGHT STICK."
+			},
+			{
+				"Face": "signpost",
+				"Voice": "sign/general_06",
+				"Text": "Sometimes the key to a tricky jump\nis finding the right perspective."
+			},
+			{
+				"Face": "signpost",
+				"Voice": "sign/snark_02",
+				"Text": "Now SCRAM!"
+			}
+		],
+		"CreditsKit": [
+			{
+				"Face": "kit",
+				"Voice": "sign/general_01",
+				"Text": "Celeste 64: Enter the Datastream"
+			},
+			{
+				"Face": "kit",
+				"Voice": "sign/general_02",
+				"Text": "Created by SkyKittenPuppy"
+			},
+			{
+				"Face": "kit",
+				"Voice": "sign/general_04",
+				"Text": "Special Thanks to the Celeste Team"
+			},
+			{
+				"Face": "kit",
+				"Voice": "sign/general_03",
+				"Text": "Maddy Thorson, Noel Berry, Amora B., Pedro Medeiros,\nLena Raine, Heidy Motta, and Kevin Regamey and\nJeff Tangsoc of Power Up Audio"
+			}
 		]
 	}
 }

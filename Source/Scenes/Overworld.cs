@@ -385,7 +385,7 @@ public class Overworld : Scene
 				UI.Prompt(batch, Controls.Confirm, Loc.Str("confirm"), at, out _, 1.0f);
 
 				// show version number on Overworld as well
-                UI.Text(batch, Game.VersionString, bounds.BottomLeft + new Vec2(4, -4) * Game.RelativeScale, new Vec2(0, 1), Color.White * 0.25f);
+                UI.Text(batch, Game.Version, bounds.BottomLeft + new Vec2(4, -4) * Game.RelativeScale, new Vec2(0, 1), Color.White * 0.25f);
             }
 
 			if (cameraCloseUpEase > 0)

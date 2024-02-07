@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
-using System.Text.Json;
+using System.Reflection;
+using Module = Foster.Framework.Module;
 
 namespace Celeste64;
 
@@ -39,8 +40,7 @@ public class Game : Module
 	public const string GameTitle = "Celeste 64: Fragments of the Mountain";
 	public const int Width = 640;
 	public const int Height = 360;
-	public static readonly Version Version = typeof(Game).Assembly.GetName().Version!;
-	public static readonly string VersionString = $"v.{Version.Major}.{Version.Minor}.{Version.Build}";
+	public static readonly string Version = $"v.{Assembly.GetEntryAssembly()?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion.Split('+')[0]}" ?? "";
 
 	/// <summary>
 	/// Used by various rendering elements to proportionally scale if you change the default game resolution

@@ -24,7 +24,7 @@
 	{
 		"ID": "0_FORSAKEN_CITY_THEO",
 		"Name": "Forsaken City Revisited",
-		"Label": "Created by SkyKittenPuppy",
+		"Label": "Created by skykittenpuppy",
 		"Preview": "Postcards/ForsakenCity",
 
 		"TotalCollectables": 30,
@@ -46,10 +46,10 @@
 	{
 		"ID": "1_DATASTREAM",
 		"Name": "The Datastream",
-		"Label": "Created for InTheLittlewood\nby SkyKittenPuppy",
+		"Label": "Created by skykittenpuppy\nfor InTheLittlewood",
 		"Preview": "Postcards/Datastream",
 
-		"TotalCollectables": 0,
+		"TotalCollectables": 1,
 		"CollectableModel": "shard",
 		"TotalSubAreas": 0,
 		"SubAreaModel": "rift",

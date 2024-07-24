@@ -32,7 +32,7 @@ public class Map
 
 	public static readonly Dictionary<string, ActorFactory> ActorFactories =  new()
 	{
-		["Strawberry"] = new((map, entity) =>
+		["Collectable"] = new((map, entity) =>
 		{
 			var id = $"{map.LoadWorld!.Entry.Map}/{map.LoadStrawberryCounter}";
 			var lockedCondition = entity.GetStringProperty("targetname", string.Empty);
@@ -45,7 +45,7 @@ public class Map
 			return new Collectable(id, isLocked, lockedCondition, playUnlockSound, bubbleTo);
 		}),
 		["Refill"] = new((map, entity) => new Refill(entity.GetIntProperty("double", 0) > 0)),
-		["Cassette"] = new((map, entity) => new SubArea(entity.GetStringProperty("map", string.Empty))),
+		["SubArea"] = new((map, entity) => new SubArea(entity.GetStringProperty("map", string.Empty))),
 		["Coin"] = new((map, entity) => new Coin()),
 		["Feather"] = new((map, entity) => new Feather()),
 		["MovingBlock"] = new((map, entity) =>
@@ -59,7 +59,7 @@ public class Map
 		["DashBlock"] = new((map, entity) => new DashBlock(map.FindTargetNodeFromParam(entity, "target"))) { IsSolidGeometry = true },
 		["FallingBlock"] = new((map, entity) =>
 		{
-			return new FallingBlock() { Secret = (entity.GetIntProperty("secret", 0) != 0) };
+			return new FallingBlock() { Secret = entity.GetIntProperty("secret", 0) != 0 };
 		}) { IsSolidGeometry = true },
 		["FloatyBlock"] = new((map, entity) => new FloatyBlock()) { IsSolidGeometry = true },
 		["IceWall"] = new((map, entity) => new IceWall()) { IsSolidGeometry = true },

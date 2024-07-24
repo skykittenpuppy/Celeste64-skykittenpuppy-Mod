@@ -112,7 +112,7 @@
 }
 // entity 2
 {
-"classname" "Cassette"
+"classname" "SubArea"
 "origin" "-184 -368 504"
 }
 // entity 3
@@ -798,7 +798,7 @@
 }
 // entity 62
 {
-"classname" "Strawberry"
+"classname" "Collectable"
 "origin" "32 4704 944"
 }
 // entity 63

@@ -465,13 +465,13 @@
 }
 // entity 1
 {
-"classname" "Strawberry"
+"classname" "Collectable"
 "origin" "0 4160 496"
 "targetname" "bside1"
 }
 // entity 2
 {
-"classname" "Cassette"
+"classname" "SubArea"
 "origin" "-216 -64 504"
 }
 // entity 3

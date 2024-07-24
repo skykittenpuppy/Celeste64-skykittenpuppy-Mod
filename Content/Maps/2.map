@@ -6235,7 +6235,7 @@
 }
 // entity 5
 {
-"classname" "Strawberry"
+"classname" "Collectable"
 "origin" "0 776 640"
 "targetname" "s00"
 }
@@ -6247,7 +6247,7 @@
 }
 // entity 7
 {
-"classname" "Strawberry"
+"classname" "Collectable"
 "origin" "320 3456 808"
 "targetname" "s01"
 }
@@ -6263,7 +6263,7 @@
 }
 // entity 10
 {
-"classname" "Strawberry"
+"classname" "Collectable"
 "origin" "944 2128 1096"
 "targetname" "s04"
 }
@@ -6275,13 +6275,13 @@
 }
 // entity 12
 {
-"classname" "Strawberry"
+"classname" "Collectable"
 "origin" "-680 2200 2248"
 "targetname" "s02"
 }
 // entity 13
 {
-"classname" "Cassette"
+"classname" "SubArea"
 "origin" "1121.71 4485.31 848"
 "map" "1-4"
 "angle" "60"
@@ -6390,7 +6390,7 @@
 }
 // entity 22
 {
-"classname" "Cassette"
+"classname" "SubArea"
 "origin" "-672 1872 1488"
 "map" "1-2"
 }
@@ -6460,7 +6460,7 @@
 }
 // entity 29
 {
-"classname" "Strawberry"
+"classname" "Collectable"
 "origin" "-1760 -1176 232"
 "targetname" "s05"
 "locked" "0"
@@ -6468,7 +6468,7 @@
 }
 // entity 30
 {
-"classname" "Cassette"
+"classname" "SubArea"
 "origin" "-672 2880 560"
 "map" "1-1"
 }
@@ -6500,7 +6500,7 @@
 }
 // entity 33
 {
-"classname" "Strawberry"
+"classname" "Collectable"
 "origin" "-416 4392 424"
 "targetname" "s06"
 }
@@ -6597,7 +6597,7 @@
 }
 // entity 41
 {
-"classname" "Strawberry"
+"classname" "Collectable"
 "origin" "-224 5744 776"
 "targetname" "FallingBlockPuzzle"
 "locked" "1"
@@ -6701,7 +6701,7 @@
 }
 // entity 51
 {
-"classname" "Strawberry"
+"classname" "Collectable"
 "origin" "-1856 6976 968"
 "targetname" "s08"
 }
@@ -6811,7 +6811,7 @@
 }
 // entity 61
 {
-"classname" "Cassette"
+"classname" "SubArea"
 "origin" "-321.09 7518.91 640"
 "map" "1-6"
 "angle" "45"
@@ -6895,7 +6895,7 @@
 }
 // entity 73
 {
-"classname" "Strawberry"
+"classname" "Collectable"
 "origin" "-3104 3136 520"
 "targetname" ""
 "bubbleto" "009"
@@ -6915,7 +6915,7 @@
 }
 // entity 75
 {
-"classname" "Strawberry"
+"classname" "Collectable"
 "origin" "1328 2032 904"
 "targetname" "s04"
 }
@@ -6973,7 +6973,7 @@
 }
 // entity 80
 {
-"classname" "Strawberry"
+"classname" "Collectable"
 "origin" "912 5552 1256"
 "targetname" "s07"
 "locked" "1"
@@ -7011,7 +7011,7 @@
 }
 // entity 84
 {
-"classname" "Cassette"
+"classname" "SubArea"
 "origin" "-320 4168 808"
 "map" "1-3"
 }
@@ -8840,7 +8840,7 @@
 }
 // entity 211
 {
-"classname" "Strawberry"
+"classname" "Collectable"
 "origin" "2488 4720 680"
 }
 // entity 212
@@ -8931,7 +8931,7 @@
 }
 // entity 219
 {
-"classname" "Strawberry"
+"classname" "Collectable"
 "origin" "-640 6560 416"
 "targetname" "s07"
 "locked" "1"
@@ -8991,7 +8991,7 @@
 }
 // entity 225
 {
-"classname" "Strawberry"
+"classname" "Collectable"
 "origin" "4528 6192 104"
 "targetname" ""
 "bubbleto" "010"
@@ -9032,13 +9032,13 @@
 }
 // entity 231
 {
-"classname" "Strawberry"
+"classname" "Collectable"
 "origin" "8096 6448 776"
 "bubbleto" "010"
 }
 // entity 232
 {
-"classname" "Strawberry"
+"classname" "Collectable"
 "origin" "4704 7664 488"
 "bubbleto" "010"
 }
@@ -9184,7 +9184,7 @@
 }
 // entity 245
 {
-"classname" "Cassette"
+"classname" "SubArea"
 "origin" "6304 6560 1224"
 "map" "1-8"
 }
@@ -9279,19 +9279,19 @@
 }
 // entity 254
 {
-"classname" "Cassette"
+"classname" "SubArea"
 "origin" "2352 8320 368"
 "map" "1-7"
 }
 // entity 255
 {
-"classname" "Cassette"
+"classname" "SubArea"
 "origin" "3200 3280 400"
 "map" "1-5"
 }
 // entity 256
 {
-"classname" "Strawberry"
+"classname" "Collectable"
 "origin" "1024 2400 520"
 "targetname" "DoubleDashPuzzle"
 "locked" "1"
@@ -9432,7 +9432,7 @@
 }
 // entity 269
 {
-"classname" "Strawberry"
+"classname" "Collectable"
 "origin" "4256 2656 1800"
 }
 // entity 270
@@ -9554,7 +9554,7 @@
 }
 // entity 280
 {
-"classname" "Strawberry"
+"classname" "Collectable"
 "origin" "2880 896 1064"
 "bubbleto" "016"
 }
@@ -9978,7 +9978,7 @@
 }
 // entity 313
 {
-"classname" "Strawberry"
+"classname" "Collectable"
 "origin" "2192 4848 520"
 }
 // entity 314
@@ -11718,7 +11718,7 @@
 }
 // entity 456
 {
-"classname" "Cassette"
+"classname" "SubArea"
 "origin" "2192 4368 976"
 "map" "1-9"
 }
@@ -11737,7 +11737,7 @@
 }
 // entity 459
 {
-"classname" "Cassette"
+"classname" "SubArea"
 "origin" "688 3888 1984"
 "map" "1-10"
 }

@@ -2227,7 +2227,7 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 				distance = hit.Distance;
 
 			for (int i = 3; i < distance; i += 5)
-				populate.Add(Sprite.CreateBillboard(World, Position - Vec3.UnitZ * i, "shadow", 0.5f, Color.Gray * 0.50f));
+				populate.Add(Sprite.CreateBillboard(World, Position - Vec3.UnitZ * i, "z_guide", 0.5f, Color.White * 0.75f));
 		}	
 	}
 

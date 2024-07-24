@@ -31,11 +31,11 @@
     name(string) : "Name" : "Start"
 ]
 
-@PointClass model({ "path": "Models/strawberry.glb", "scale": 12 }) = Strawberry : "Strawb Get!"
+@PointClass model({ "path": "Models/strawberry.glb", "scale": 12 }) = Collectable : "Strawberry Get!"
 [
     locked(integer) : "Locked" : 0
     targetname(string) : "Target Name"
-    bubbleto(string) : "Bubble To" : : "If assigned, Strawberry will bubble the player"
+    bubbleto(string) : "Bubble To" : : "If assigned, Collectable will bubble the player"
 ]
 
 @PointClass model({ "path": "Models/granny.glb", "scale": 12 }) = Granny : "She cool" 
@@ -79,7 +79,7 @@
 
 ]
 
-@PointClass size(-16 -16 -16, 16 16 16) = Cassette : "Warps to a B-Side challenge room"
+@PointClass size(-16 -16 -16, 16 16 16) = SubArea : "Warps to a B-Side challenge room"
 [
     map(string) : "Map"
 ]

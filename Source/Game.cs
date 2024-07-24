@@ -37,7 +37,7 @@ public class Game : Module
 	}
 
 	public const string GamePath = "Celeste64";
-	public const string GameTitle = "Celeste 64: Fragments of the Mountain";
+	public const string GameTitle = "Celeste 64: skykittenpuppy Mod!";
 	public const int Width = 640;
 	public const int Height = 360;
 	public static readonly string Version = $"v.{Assembly.GetEntryAssembly()?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion.Split('+')[0]}" ?? "";

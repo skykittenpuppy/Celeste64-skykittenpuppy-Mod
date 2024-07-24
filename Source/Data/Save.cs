@@ -6,7 +6,7 @@ namespace Celeste64;
 
 public class Save
 {
-	public const string FileName = "save.json";
+	public const string FileName = "save_skykittenpuppy_mod.json";
 
 	public enum InvertCameraOptions
 	{

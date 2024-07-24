@@ -23,7 +23,7 @@ public struct Sprite
 
 			return new Sprite
 			{
-				Subtexture = Assets.Subtextures["circle"],
+				Subtexture = Assets.Subtextures["shadow"],
 				A = at + (-a - b) * size,
 				B = at + (a - b) * size,
 				C = at + (a + b) * size,

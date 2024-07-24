@@ -6,7 +6,16 @@ namespace Celeste64;
 public class World : Scene
 {
 	public enum EntryReasons { Entered, Returned, Respawned }
-	public readonly record struct EntryInfo(string Map, string CheckPoint, bool Submap, string PlayerModel, bool PlayerHairTrail, int[] PlayerHairColours, string Collectible, EntryReasons Reason);
+	public readonly record struct EntryInfo(
+		string Map, 
+		string CheckPoint, 
+		bool Submap, 
+		string PlayerModel,
+		bool PlayerHairTrail, 
+		int[] PlayerHairColours, 
+		string CollectableModel, 
+		string SubAreaModel, 
+		EntryReasons Reason);
 
 	public Camera Camera = new();
 	public Rng Rng = new(0);
@@ -42,6 +51,7 @@ public class World : Scene
 	private float strawbCounterCooldown = 0;
 	private float strawbCounterEase = 0;
 	private int strawbCounterWas;
+	private int subAreaCounterWas;
 
 	private bool IsInEndingArea => Get<Player>() is {} player && Overlaps<EndingArea>(player.Position);
 	private bool IsPauseEnabled
@@ -72,7 +82,8 @@ public class World : Scene
 		Camera.FarPlane = 800;
 		Camera.FOVMultiplier = 1;
 
-		strawbCounterWas = Save.CurrentRecord.Strawberries.Count;
+		strawbCounterWas = Save.CurrentRecord.Collectables.Count;
+		subAreaCounterWas = Save.CurrentRecord.SubAreas.Count;
 		strawbCounterWiggle = 0;
 
 		// setup pause menu
@@ -291,11 +302,11 @@ public class World : Scene
 		// handle strawb counter
 		{
 			// wiggle when gained
-			if (strawbCounterWas != Save.CurrentRecord.Strawberries.Count)
+			if (strawbCounterWas != Save.CurrentRecord.Collectables.Count)
 			{
 				strawbCounterCooldown = 4.0f;
 				strawbCounterWiggle = 1.0f;
-				strawbCounterWas = Save.CurrentRecord.Strawberries.Count;
+				strawbCounterWas = Save.CurrentRecord.Collectables.Count;
 			}
 			else
 				Calc.Approach(ref strawbCounterWiggle, 0, Time.Delta / .6f);
@@ -785,12 +796,6 @@ public class World : Scene
 			// stats
 			{
 				var at = bounds.TopLeft + new Vec2(4, 8);
-				if (IsInEndingArea || Save.Instance.SpeedrunTimer)
-				{
-					UI.Timer(batch, Save.CurrentRecord.Time, at);
-					at.Y += UI.IconSize + 4;
-				}
-
 				if (strawbCounterEase > 0)
 				{
 					var wiggle = 1 + MathF.Sin(strawbCounterWiggle * MathF.Tau * 2) * strawbCounterWiggle * .3f;
@@ -799,13 +804,27 @@ public class World : Scene
 						Matrix3x2.CreateTranslation(0, -UI.IconSize / 2) * 
 						Matrix3x2.CreateScale(wiggle) *
 						Matrix3x2.CreateTranslation(at + new Vec2(-60 * (1 - Ease.Cube.Out(strawbCounterEase)), UI.IconSize / 2)));
-					UI.Strawberries(batch, Save.CurrentRecord.Strawberries.Count, Entry.Collectible, Vec2.Zero);
+					UI.Collectables(batch, Save.CurrentRecord.Collectables.Count, Entry.CollectableModel, Vec2.Zero);
+					if (subAreaCounterWas != Save.CurrentRecord.SubAreas.Count || IsInEndingArea)
+					{
+						UI.SubAreas(batch, Save.CurrentRecord.SubAreas.Count, Entry.SubAreaModel, new Vec2(UI.IconSize * 2 + 4, 0));
+						subAreaCounterWas = Save.CurrentRecord.SubAreas.Count;
+					}
 					batch.PopMatrix();
+					at.Y += UI.IconSize + 4;
 				}
 
-				// show version number when paused / in ending area
+				if (IsInEndingArea || Paused || Save.Instance.SpeedrunTimer)
+				{
+					UI.Timer(batch, Save.CurrentRecord.Time, at);
+					at.Y += UI.IconSize + 4;
+				}
+
 				if (IsInEndingArea || Paused)
 				{
+					UI.Deaths(batch, Save.CurrentRecord.Deaths, at);
+					at.Y += UI.IconSize + 4;
+
                     UI.Text(batch, Game.Version, bounds.BottomLeft + new Vec2(4, -4) * Game.RelativeScale, new Vec2(0, 1), Color.White * 0.25f);
                 }
 			}

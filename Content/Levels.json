@@ -3,8 +3,13 @@
 		"ID": "0_FORSAKEN_CITY",
 		"Name": "Forsaken City",
 		"Label": "Created for the 6th anniversary\nby the Celeste Team",
-		"Strawberries": 30,
-		"Collectible": "strawberry",
+		"Preview": "Postcards/ForsakenCity",
+
+		"TotalCollectables": 30,
+		"CollectableModel": "strawberry",
+		"TotalSubAreas": 10,
+		"SubAreaModel": "cassette",
+
 		"PlayerModel": "maddy",
 		"PlayerHairTrail": true,
 		"PlayerHairColours": [
@@ -13,32 +18,20 @@
 			14363648,
 			16421375
 		],
-		"Preview": "Postcards/ForsakenCity",
+
 		"Map": "1"
 	},
 	{
-		"ID": "1_DATASTREAM",
-		"Name": "Datastream",
-		"Label": "Created for InTheLittlewood\nby SkyKittenPuppy!",
-		"Strawberries": 0,
-		"Collectible": "shard",
-		"PlayerModel": "martyn",
-		"PlayerHairTrail": false,
-		"PlayerHairColours": [
-			13099098,
-			4607551,
-			15583839,
-			8101662
-		],
-		"Preview": "Postcards/Datastream",
-		"Map": "DS"
-	},
-	{
 		"ID": "0_FORSAKEN_CITY_THEO",
-		"Name": "Forsaken City (with theo!)",
-		"Label": "Created for the 6th anniversary\nby the Celeste Team",
-		"Strawberries": 30,
-		"Collectible": "strawberry",
+		"Name": "Forsaken City Revisited",
+		"Label": "Created by SkyKittenPuppy",
+		"Preview": "Postcards/ForsakenCity",
+
+		"TotalCollectables": 30,
+		"CollectableModel": "polaroid",
+		"TotalSubAreas": 10,
+		"SubAreaModel": "compactdisk",
+
 		"PlayerModel": "theo",
 		"PlayerHairTrail": false,
 		"PlayerHairColours": [
@@ -47,7 +40,29 @@
 			4530968,
 			7357242
 		],
-		"Preview": "Postcards/ForsakenCity",
-		"Map": "1"
+
+		"Map": "2"
+	},
+	{
+		"ID": "1_DATASTREAM",
+		"Name": "The Datastream",
+		"Label": "Created for InTheLittlewood\nby SkyKittenPuppy",
+		"Preview": "Postcards/Datastream",
+
+		"TotalCollectables": 0,
+		"CollectableModel": "shard",
+		"TotalSubAreas": 0,
+		"SubAreaModel": "rift",
+
+		"PlayerModel": "martyn",
+		"PlayerHairTrail": false,
+		"PlayerHairColours": [
+			13099098,
+			4607551,
+			15583839,
+			8101662
+		],
+
+		"Map": "DS"
 	}
 ]

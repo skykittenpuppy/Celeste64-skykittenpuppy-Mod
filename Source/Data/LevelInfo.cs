@@ -11,12 +11,17 @@ public class LevelInfo
 	public string ID { get; set; } = string.Empty;
 	public string Name { get; set; } = string.Empty;
 	public string Label { get; set; } = string.Empty;
-	public int Strawberries { get; set; } = 0;
-	public string Collectible { get; set; } = string.Empty;
+	public string Preview { get; set; } = string.Empty;
+
+	public int TotalCollectables { get; set; } = 0;
+	public string CollectableModel { get; set; } = string.Empty;
+	public int TotalSubAreas { get; set; } = 0;
+	public string SubAreaModel { get; set; } = string.Empty;
+
 	public string PlayerModel { get; set; } = "maddy";
 	public bool PlayerHairTrail { get; set; } = true;
 	public int[] PlayerHairColours { get; set; } = [];
-	public string Preview { get; set; } = string.Empty;
+
 	public string Map { get; set; } = string.Empty;
 
 	public void Enter(ScreenWipe? toBlack = null, float holdTime = 0)
@@ -25,7 +30,16 @@ public class LevelInfo
 		Game.Instance.Goto(new Transition()
 		{
 			Mode = Transition.Modes.Replace,
-			Scene = () => new World(new(Map, Save.CurrentRecord.Checkpoint, false, PlayerModel, PlayerHairTrail, PlayerHairColours, Collectible, World.EntryReasons.Entered)),
+			Scene = () => new World(new(
+				Map, 
+				Save.CurrentRecord.Checkpoint, 
+				false, 
+				PlayerModel, 
+				PlayerHairTrail, 
+				PlayerHairColours, 
+				CollectableModel, 
+				SubAreaModel, 
+				World.EntryReasons.Entered)),
 			ToBlack = toBlack ?? new SpotlightWipe(),
 			FromBlack = new SpotlightWipe(),
 			StopMusic = true,

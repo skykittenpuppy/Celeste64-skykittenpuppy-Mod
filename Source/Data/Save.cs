@@ -23,8 +23,8 @@ public class Save
 	{
 		public string ID { get; set; } = string.Empty;
 		public string Checkpoint { get; set; } = string.Empty;
-		public HashSet<string> Strawberries { get; set; } = [];
-		public HashSet<string> CompletedSubMaps { get; set; } = [];
+		public HashSet<string> Collectables { get; set; } = [];
+		public HashSet<string> SubAreas { get; set; } = [];
 		public Dictionary<string, int> Flags { get; set; } = []; 
 		public int Deaths { get; set; } = 0;
 		public TimeSpan Time { get; set; } = new();

@@ -1,7 +1,7 @@
 
 namespace Celeste64;
 
-public class Strawberry : Actor, IHaveModels, IHaveSprites, IPickup, ICastPointShadow
+public class Collectable : Actor, IHaveModels, IHaveSprites, IPickup, ICastPointShadow
 {
 	public SkinnedModel Model;
 	public ParticleSystem Particles;
@@ -11,7 +11,7 @@ public class Strawberry : Actor, IHaveModels, IHaveSprites, IPickup, ICastPointS
 	
 	public bool IsCollected => 
 		!string.IsNullOrEmpty(ID) && 
-		Save.CurrentRecord.Strawberries.Contains(ID);
+		Save.CurrentRecord.Collectables.Contains(ID);
 
 	public float PointShadowAlpha { get; set; } = 1.0f;
 
@@ -27,17 +27,15 @@ public class Strawberry : Actor, IHaveModels, IHaveSprites, IPickup, ICastPointS
 	private float checkConditionsOffset;
 	private float scaleMultiplier = 1;
 
-	public Strawberry(string id, bool isLocked, string? unlockCondition, bool unlockSound, Vec3? bubbleTo, Color haloColor, string model)
+	public Collectable(string id, bool isLocked, string? unlockCondition, bool unlockSound, Vec3? bubbleTo)
 	{
 		ID = id;
 		IsLocked = isLocked;
 		UnlockConditionGroup = unlockCondition ?? string.Empty;
 		PlayUnlockSound = unlockSound;
 		BubbleTo = bubbleTo;
-		HaloColor = haloColor;
-		Model = new(Assets.Models[model]);
-		Model.Transform = Matrix.CreateScale(3);
-		Model.Materials[0].Effects = 0;
+		HaloColor = 0xeed14f;
+		Model = new(Assets.Models["strawberry"]);
 		LocalBounds = new BoundingBox(Vec3.Zero, 10);
 		Particles = new(32, new ParticleTheme()
 		{
@@ -71,6 +69,10 @@ public class Strawberry : Actor, IHaveModels, IHaveSprites, IPickup, ICastPointS
 		}
 
 		UpdateOffScreen = IsLocked;
+		
+		Model = new(Assets.Models[World.Entry.CollectableModel]);
+		Model.Transform = Matrix.CreateScale(3);
+		Model.Materials[0].Effects = 0;
 	}
 
 	public override void Update()

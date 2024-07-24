@@ -1659,7 +1659,7 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 
 	#region StrawbGet State
 
-	private Strawberry? lastStrawb;
+	private Collectable? lastStrawb;
 	private Vec2 strawbGetForward;
 
 	private void StStrawbGetEnter()
@@ -1701,13 +1701,13 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 		yield return 2.0f;
 
 		if (lastStrawb != null)
-			Save.CurrentRecord.Strawberries.Add(lastStrawb.ID);
+			Save.CurrentRecord.Collectables.Add(lastStrawb.ID);
 		
 		yield return 1.2f;
 
 		if (World.Entry.Submap)
 		{
-			Save.CurrentRecord.CompletedSubMaps.Add(World.Entry.Map);
+			Save.CurrentRecord.SubAreas.Add(World.Entry.Map);
 			Game.Instance.Goto(new Transition()
 			{
 				Mode = Transition.Modes.Pop,
@@ -1723,7 +1723,7 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 		}
 	}
 
-	public void StrawbGet(Strawberry strawb)
+	public void StrawbGet(Collectable strawb)
 	{
 		if (stateMachine.State != States.StrawbGet)
 		{
@@ -1939,7 +1939,7 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 	{
 		yield return Co.SingleFrame;
 
-		enterLookAt = World.Get<Strawberry>();
+		enterLookAt = World.Get<Collectable>();
 
 		if (enterLookAt != null)
 		{
@@ -2075,9 +2075,9 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 
 	#region Cassette State
 
-	private Cassette? cassette;
+	private SubArea? cassette;
 
-	public void EnterCassette(Cassette it)
+	public void EnterCassette(SubArea it)
 	{
 		if (stateMachine.State != States.Cassette)
 		{
@@ -2128,8 +2128,15 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 				Game.Instance.Goto(new Transition()
 				{
 					Mode = Transition.Modes.Push,
-					Scene = () => new World(new(cassette.Map, string.Empty, true,
-						World.Entry.PlayerModel, World.Entry.PlayerHairTrail, World.Entry.PlayerHairColours, World.Entry.Collectible,
+					Scene = () => new World(new(
+						cassette.Map, 
+						string.Empty, 
+						true,
+						World.Entry.PlayerModel, 
+						World.Entry.PlayerHairTrail, 
+						World.Entry.PlayerHairColours, 
+						World.Entry.CollectableModel,
+						World.Entry.SubAreaModel,
 						World.EntryReasons.Entered)),
 					ToPause = true,
 					ToBlack = new SpotlightWipe(),
@@ -2170,7 +2177,7 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 		// debug: draw camera origin pos
 		if (World.DebugDraw)
 		{
-			populate.Add(Sprite.CreateBillboard(World, cameraOriginPos, "circle", 1, Color.Red));
+			populate.Add(Sprite.CreateBillboard(World, cameraOriginPos, "debug_circle", 1, Color.Red));
 		}
 
 		// debug: draw wall up-normal
@@ -2182,7 +2189,7 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 
 				for (int i = 0; i < 12; i++)
 				{
-					populate.Add(Sprite.CreateBillboard(World, SolidWaistTestPos + up * i * 1.5f, "circle", 1, Color.Red));
+					populate.Add(Sprite.CreateBillboard(World, SolidWaistTestPos + up * i * 1.5f, "debug_circle", 1, Color.Red));
 				}
 			}
 		}
@@ -2208,8 +2215,8 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 				var rad = Ease.Cube.Out(ease) * 16;
 				var pos = SolidWaistTestPos + World.Camera.Left * MathF.Cos(rot) * rad + World.Camera.Up * MathF.Sin(rot) * rad;
 				var size = 3 * s;
-				populate.Add(Sprite.CreateBillboard(World, pos, "circle", size + 0.5f, Color.Black) with { Post = true });
-				populate.Add(Sprite.CreateBillboard(World, pos, "circle", size, col) with { Post = true });
+				populate.Add(Sprite.CreateBillboard(World, pos, "death_orb", size + 0.5f, Color.Black) with { Post = true });
+				populate.Add(Sprite.CreateBillboard(World, pos, "death_orb", size, col) with { Post = true });
 			}
 		}
 
@@ -2220,7 +2227,7 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 				distance = hit.Distance;
 
 			for (int i = 3; i < distance; i += 5)
-				populate.Add(Sprite.CreateBillboard(World, Position - Vec3.UnitZ * i, "circle", 0.5f, Color.Gray * 0.50f));
+				populate.Add(Sprite.CreateBillboard(World, Position - Vec3.UnitZ * i, "shadow", 0.5f, Color.Gray * 0.50f));
 		}	
 	}
 

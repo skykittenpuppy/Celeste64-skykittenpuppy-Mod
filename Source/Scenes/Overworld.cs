@@ -30,7 +30,7 @@ public class Overworld : Scene
 			{
 				Menu.Add(new Menu.Option(Loc.Str("Continue")));
 				Menu.Add(new Menu.Option(Loc.Str("Restart")));
-				Complete = record.Strawberries.Count >= Level.Strawberries;
+				Complete = record.Collectables.Count >= Level.TotalCollectables && record.SubAreas.Count >= Level.TotalSubAreas;
 			}
 			else
 			{
@@ -58,7 +58,7 @@ public class Overworld : Scene
 
 			if (SelectionEase < 0.50f)
 			{
-				if (Complete && Assets.Textures.GetValueOrDefault("overworld/"+Level.Collectible) is {} texture)
+				if (Complete && Assets.Textures.GetValueOrDefault("overworld/"+Level.CollectableModel) is {} texture)
 				{
 					batch.Image(
 						new Subtexture(texture), 
@@ -81,19 +81,23 @@ public class Overworld : Scene
 				// stats
 				batch.PushMatrix(Matrix3x2.CreateScale(1.3f) * Matrix3x2.CreateTranslation(bounds.Center + new Vec2(0, -Padding)));
 				{
-					int strawbs = 0, deaths = 0;
+					int collectables = 0;
+					int subAreas = 0;
+					int deaths = 0;
 					TimeSpan time = new();
 
 					if (Save.Instance.TryGetRecord(Level.ID) is { } record)
 					{
-						strawbs = record.Strawberries.Count;
+						collectables = record.Collectables.Count;
+						subAreas = record.SubAreas.Count;
 						deaths = record.Deaths;
 						time = record.Time;
 					}
 
-					UI.Strawberries(batch, strawbs, Level.Collectible, new Vec2(-8, -UI.IconSize / 2 - 4), 1);
-					UI.Deaths(batch, deaths, new Vec2(8, -UI.IconSize / 2 - 4), 0);
-					UI.Timer(batch, time, new Vec2(0, UI.IconSize / 2 + 4), 0.5f);
+					UI.Collectables(batch, collectables, Level.CollectableModel, new Vec2(-8, -UI.IconSize - 4), 1);
+					UI.SubAreas(batch, subAreas, Level.SubAreaModel, new Vec2(8, -UI.IconSize - 4), 0);
+					UI.Timer(batch, time, new Vec2(0, 0), 0.5f);
+					UI.Deaths(batch, deaths, new Vec2(0, UI.IconSize + 4), 0.5f);
 				}
 				batch.PopMatrix();
 

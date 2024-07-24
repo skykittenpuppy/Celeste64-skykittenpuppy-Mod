@@ -42,22 +42,10 @@ public class Map
 			if (map.FindTargetNode(entity.GetStringProperty("bubbleto", string.Empty), out var point))
 				bubbleTo = point;
 			map.LoadStrawberryCounter++;
-			return new Strawberry(id, isLocked, lockedCondition, playUnlockSound, bubbleTo, 0xeed14f, "strawberry");
-		}),
-		["Shard"] = new((map, entity) =>
-		{
-			var id = $"{map.LoadWorld!.Entry.Map}/{map.LoadStrawberryCounter}";
-			var lockedCondition = entity.GetStringProperty("targetname", string.Empty);
-			var isLocked = entity.GetIntProperty("locked", 0) > 0;
-			var playUnlockSound = entity.GetIntProperty("noUnlockSound", 0) == 0;
-			Vec3? bubbleTo = null;
-			if (map.FindTargetNode(entity.GetStringProperty("bubbleto", string.Empty), out var point))
-				bubbleTo = point;
-			map.LoadStrawberryCounter++;
-			return new Strawberry(id, isLocked, lockedCondition, playUnlockSound, bubbleTo, 0x6f4fab, "shard");
+			return new Collectable(id, isLocked, lockedCondition, playUnlockSound, bubbleTo);
 		}),
 		["Refill"] = new((map, entity) => new Refill(entity.GetIntProperty("double", 0) > 0)),
-		["Cassette"] = new((map, entity) => new Cassette(entity.GetStringProperty("map", string.Empty))),
+		["Cassette"] = new((map, entity) => new SubArea(entity.GetStringProperty("map", string.Empty))),
 		["Coin"] = new((map, entity) => new Coin()),
 		["Feather"] = new((map, entity) => new Feather()),
 		["MovingBlock"] = new((map, entity) =>

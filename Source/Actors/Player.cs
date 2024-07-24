@@ -111,7 +111,7 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 	public bool Dead = false;
 
 	public Vec3 ModelScale = Vec3.One;
-	public SkinnedModel Model;
+	public SkinnedModel Model = new(Assets.Models["maddy"]);
 	public readonly Hair Hair = new();
 	public float PointShadowAlpha { get; set; } = 1.0f;
 
@@ -183,7 +183,7 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 		&& stateMachine.State != States.Dead;
 
     public Player()
-    {
+    {		
 		PointShadowAlpha = 1.0f;
 		LocalBounds = new BoundingBox(new Vec3(0, 0, 10), 10);
 		UpdateOffScreen = true;

@@ -49,9 +49,9 @@
 		"Label": "Created by skykittenpuppy\nfor InTheLittlewood",
 		"Preview": "Postcards/Datastream",
 
-		"TotalCollectables": 1,
+		"TotalCollectables": 2,
 		"CollectableModel": "shard",
-		"TotalSubAreas": 0,
+		"TotalSubAreas": 1,
 		"SubAreaModel": "rift",
 
 		"PlayerModel": "martyn",

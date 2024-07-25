@@ -1988,6 +1988,12 @@
 }
 // entity 107
 {
+"classname" "SubArea"
+"origin" "-80 96 496"
+"map" "DS-1"
+}
+// entity 108
+{
 "classname" "func_group"
 "_tb_type" "_tb_layer"
 "_tb_name" "Bounds"
@@ -1996,7 +2002,7 @@
 "_tb_layer_locked" "1"
 "_tb_layer_hidden" "1"
 }
-// entity 108
+// entity 109
 {
 "classname" "DeathBlock"
 "_tb_layer" "1"
@@ -2010,7 +2016,7 @@
 ( 1920 -1920 128 ) ( 1920 1920 128 ) ( 1920 1920 -384 ) TB_empty 0 0 0 1 1
 }
 }
-// entity 109
+// entity 110
 {
 "classname" "EndingArea"
 "_tb_layer" "1"
@@ -2022,5 +2028,27 @@
 ( -320 320 1664 ) ( 320 320 1664 ) ( 320 -320 1664 ) TB_empty 0 -16 0 1 1
 ( 320 320 1024 ) ( 320 320 1664 ) ( -320 320 1664 ) TB_empty 0 0 0 1 1
 ( 320 -320 1664 ) ( 320 320 1664 ) ( 320 320 1024 ) TB_empty 16 0 0 1 1
+}
+}
+// entity 111
+{
+"classname" "func_group"
+"_tb_type" "_tb_layer"
+"_tb_name" "Ending"
+"_tb_id" "2"
+"_tb_layer_sort_index" "1"
+}
+// entity 112
+{
+"classname" "EndingArea"
+"_tb_layer" "2"
+// brush 0
+{
+( -224 336 368 ) ( -224 -256 368 ) ( -224 -256 192 ) __TB_empty 0 0 0 1 1
+( -224 -256 368 ) ( 160 -272 368 ) ( 160 -272 192 ) __TB_empty 0 0 0 1 1
+( 160 -272 192 ) ( 160 320 192 ) ( -224 336 192 ) __TB_empty 0 0 0 1 1
+( -224 336 368 ) ( 160 320 368 ) ( 160 -272 368 ) __TB_empty 0 0 0 1 1
+( 160 320 192 ) ( 160 320 368 ) ( -224 336 368 ) __TB_empty 0 0 0 1 1
+( 160 -272 368 ) ( 160 320 368 ) ( 160 320 192 ) __TB_empty 0 0 0 1 1
 }
 }

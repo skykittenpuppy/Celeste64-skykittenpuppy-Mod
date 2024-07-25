@@ -105,7 +105,7 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 	private static Vec3 storedCameraForward;
 	private static float storedCameraDistance;
 
-	public enum States { Normal, Dashing, Skidding, Climbing, StrawbGet, FeatherStart, Feather, Respawn, Dead, StrawbReveal, Cutscene, Bubble, Cassette };
+	public enum States { Normal, Dashing, Skidding, Climbing, StrawbGet, SubAreaFinish, FeatherStart, Feather, Respawn, Dead, StrawbReveal, Cutscene, Bubble, Cassette };
 	public enum Events { Land };
 
 	public bool Dead = false;
@@ -166,7 +166,14 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 		=> stateMachine.State == States.Bubble;
 
 	public bool IsStrawberryCounterVisible
-		=> stateMachine.State == States.StrawbGet;
+		=> stateMachine.State == States.StrawbGet
+		|| stateMachine.State == States.SubAreaFinish;
+
+	public bool IsSubAreaCounterVisible
+		=> stateMachine.State == States.SubAreaFinish;
+	public bool IsDeathCounterVisible
+		=> stateMachine.State == States.Dead
+		|| stateMachine.State == States.Respawn;
 
 	public bool IsAbleToPickup
 		=> stateMachine.State != States.StrawbGet 
@@ -179,6 +186,7 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 	public bool IsAbleToPause 
 		=> stateMachine.State != States.StrawbReveal
 		&& stateMachine.State != States.StrawbGet
+		&& stateMachine.State != States.SubAreaFinish
 		&& stateMachine.State != States.Cassette
 		&& stateMachine.State != States.Dead;
 
@@ -194,6 +202,7 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 		stateMachine.InitState(States.Skidding, StSkiddingUpdate, StSkiddingEnter, StSkiddingExit);
 		stateMachine.InitState(States.Climbing, StClimbingUpdate, StClimbingEnter, StClimbingExit);
 		stateMachine.InitState(States.StrawbGet, StStrawbGetUpdate, StStrawbGetEnter, StStrawbGetExit, StStrawbGetRoutine);
+		stateMachine.InitState(States.SubAreaFinish, StStrawbGetUpdate, StStrawbGetEnter, StStrawbGetExit, StStrawbGetRoutine);
 		stateMachine.InitState(States.FeatherStart, StFeatherStartUpdate, StFeatherStartEnter, StFeatherStartExit);
 		stateMachine.InitState(States.Feather, StFeatherUpdate, StFeatherEnter, StFeatherExit);
 		stateMachine.InitState(States.Respawn, StRespawnUpdate, StRespawnEnter, StRespawnExit);
@@ -1700,14 +1709,17 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 	{
 		yield return 2.0f;
 
-		if (lastStrawb != null)
+		if (lastStrawb != null) {
 			Save.CurrentRecord.Collectables.Add(lastStrawb.ID);
+			if (World.Entry.Submap) {
+				Save.CurrentRecord.SubAreas.Add(World.Entry.Map);
+			}
+		}
 		
 		yield return 1.2f;
 
 		if (World.Entry.Submap)
 		{
-			Save.CurrentRecord.SubAreas.Add(World.Entry.Map);
 			Game.Instance.Goto(new Transition()
 			{
 				Mode = Transition.Modes.Pop,
@@ -1725,10 +1737,10 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 
 	public void StrawbGet(Collectable strawb)
 	{
-		if (stateMachine.State != States.StrawbGet)
+		if (!(stateMachine.State == States.StrawbGet || stateMachine.State == States.SubAreaFinish))
 		{
+			stateMachine.State = World.Entry.Submap? States.SubAreaFinish : States.StrawbGet;
 			lastStrawb = strawb;
-			stateMachine.State = States.StrawbGet;
 			Position = strawb.Position + Vec3.UnitZ * -3;
 			lastStrawb.Position = Position + Vec3.UnitZ * 12;
 		}

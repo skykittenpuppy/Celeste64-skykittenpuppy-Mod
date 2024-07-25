@@ -51,7 +51,20 @@ public class World : Scene
 	private float strawbCounterCooldown = 0;
 	private float strawbCounterEase = 0;
 	private int strawbCounterWas;
+
+	// makes the SubArea UI wiggle when one is completed
+	private float subAreaCounterWiggle = 0;
+	private float subAreaCounterCooldown = 0;
+	private float subAreaCounterEase = 0;
 	private int subAreaCounterWas;
+
+	// makes the Death UI wiggle when you die
+	private float deathCounterWiggle = 0;
+	private float deathCounterCooldown = 0;
+	private float deathCounterEase = 0;
+	private int deathCounterWas;
+
+	private float timerEase = 0;
 
 	private bool IsInEndingArea => Get<Player>() is {} player && Overlaps<EndingArea>(player.Position);
 	private bool IsPauseEnabled
@@ -83,8 +96,11 @@ public class World : Scene
 		Camera.FOVMultiplier = 1;
 
 		strawbCounterWas = Save.CurrentRecord.Collectables.Count;
-		subAreaCounterWas = Save.CurrentRecord.SubAreas.Count;
 		strawbCounterWiggle = 0;
+		subAreaCounterWas = Save.CurrentRecord.SubAreas.Count;
+		subAreaCounterWiggle = 0;
+		deathCounterWas = Save.CurrentRecord.Deaths;
+		deathCounterWiggle = 0;
 
 		// setup pause menu
 		{
@@ -312,16 +328,72 @@ public class World : Scene
 				Calc.Approach(ref strawbCounterWiggle, 0, Time.Delta / .6f);
 
 			// hold stawb for a while
-			if ((Get<Player>()?.IsStrawberryCounterVisible ?? false))
+			if (Get<Player>()?.IsStrawberryCounterVisible ?? false)
 				strawbCounterCooldown = 2.0f;
 			else
 				strawbCounterCooldown -= Time.Delta;
 
 			// ease strawb in/out
-			if (IsInEndingArea || Paused || strawbCounterCooldown > 0 || (Get<Player>()?.IsStrawberryCounterVisible ?? false))
+			if (IsInEndingArea || Paused || strawbCounterCooldown > 0)
 				strawbCounterEase = Calc.Approach(strawbCounterEase, 1, Time.Delta * 6.0f);
 			else
 				strawbCounterEase = Calc.Approach(strawbCounterEase, 0, Time.Delta * 6.0f);
+		}
+		// handle subArea counter
+		{
+			// wiggle when finished
+			if (subAreaCounterWas != Save.CurrentRecord.SubAreas.Count)
+			{
+				subAreaCounterCooldown = 4.0f;
+				subAreaCounterWiggle = 1.0f;
+				subAreaCounterWas = Save.CurrentRecord.SubAreas.Count;
+			}
+			else
+				Calc.Approach(ref subAreaCounterWiggle, 0, Time.Delta / .6f);
+
+			// hold subArea for a while
+			if (Get<Player>()?.IsSubAreaCounterVisible ?? false)
+				subAreaCounterCooldown = 2.0f;
+			else
+				subAreaCounterCooldown -= Time.Delta;
+
+			// ease subArea in/out
+			if (IsInEndingArea || Paused || subAreaCounterCooldown > 0)
+				subAreaCounterEase = Calc.Approach(subAreaCounterEase, 1, Time.Delta * 6.0f);
+			else
+				subAreaCounterEase = Calc.Approach(subAreaCounterEase, 0, Time.Delta * 6.0f);
+		}
+		// handle death counter
+		{
+			// wiggle when killed
+			if (deathCounterWas != Save.CurrentRecord.Deaths)
+			{
+				deathCounterCooldown = 4.0f;
+				deathCounterWiggle = 1.0f;
+				deathCounterWas = Save.CurrentRecord.Deaths;
+			}
+			else
+				Calc.Approach(ref deathCounterWiggle, 0, Time.Delta / .6f);
+
+			// hold death for a while
+			if (Get<Player>()?.IsDeathCounterVisible ?? false)
+				deathCounterCooldown = 2.0f;
+			else
+				deathCounterCooldown -= Time.Delta;
+
+			// ease subArea in/out
+			if (IsInEndingArea || Paused || deathCounterCooldown > 0)
+				deathCounterEase = Calc.Approach(deathCounterEase, 1, Time.Delta * 6.0f);
+			else
+				deathCounterEase = Calc.Approach(deathCounterEase, 0, Time.Delta * 6.0f);
+		}
+		// handle timer
+		{
+			// ease timer in/out
+			if (IsInEndingArea || Paused || Save.Instance.SpeedrunTimer)
+				timerEase = Calc.Approach(timerEase, 1, Time.Delta * 6.0f);
+			else
+				timerEase = Calc.Approach(timerEase, 0, Time.Delta * 6.0f);
 		}
 
 		// toggle debug draw
@@ -795,36 +867,61 @@ public class World : Scene
 
 			// stats
 			{
+				const float offscreenPos = -UI.IconSize * 2;
 				var at = bounds.TopLeft + new Vec2(4, 8);
-				if (strawbCounterEase > 0)
-				{
-					var wiggle = 1 + MathF.Sin(strawbCounterWiggle * MathF.Tau * 2) * strawbCounterWiggle * .3f;
 
+				if (timerEase > 0)
+				{
 					batch.PushMatrix(
 						Matrix3x2.CreateTranslation(0, -UI.IconSize / 2) * 
-						Matrix3x2.CreateScale(wiggle) *
-						Matrix3x2.CreateTranslation(at + new Vec2(-60 * (1 - Ease.Cube.Out(strawbCounterEase)), UI.IconSize / 2)));
-					UI.Collectables(batch, Save.CurrentRecord.Collectables.Count, Entry.CollectableModel, Vec2.Zero);
-					if (subAreaCounterWas != Save.CurrentRecord.SubAreas.Count || IsInEndingArea)
-					{
-						UI.SubAreas(batch, Save.CurrentRecord.SubAreas.Count, Entry.SubAreaModel, new Vec2(UI.IconSize * 2 + 4, 0));
-						subAreaCounterWas = Save.CurrentRecord.SubAreas.Count;
-					}
+						Matrix3x2.CreateScale(1) *
+						Matrix3x2.CreateTranslation(at + new Vec2(offscreenPos * (1 - Ease.Cube.Out(timerEase)), UI.IconSize / 2)));
+					UI.Timer(batch, Save.CurrentRecord.Time, Vec2.Zero);
 					batch.PopMatrix();
 					at.Y += UI.IconSize + 4;
 				}
 
-				if (IsInEndingArea || Paused || Save.Instance.SpeedrunTimer)
+				if (strawbCounterEase > 0 || subAreaCounterEase > 0)
 				{
-					UI.Timer(batch, Save.CurrentRecord.Time, at);
+					if (strawbCounterEase > 0)
+					{
+						var wiggle = 1 + MathF.Sin(strawbCounterWiggle * MathF.Tau * 2) * strawbCounterWiggle * .3f;
+
+						batch.PushMatrix(
+							Matrix3x2.CreateTranslation(0, -UI.IconSize / 2) * 
+							Matrix3x2.CreateScale(wiggle) *
+							Matrix3x2.CreateTranslation(at + new Vec2(offscreenPos * (1 - Ease.Cube.Out(strawbCounterEase)), UI.IconSize / 2)));
+						UI.Collectables(batch, Save.CurrentRecord.Collectables.Count, Entry.CollectableModel, Vec2.Zero);
+						batch.PopMatrix();
+					}
+					if (subAreaCounterEase > 0)
+					{
+						var wiggle = 1 + MathF.Sin(subAreaCounterWiggle * MathF.Tau * 2) * subAreaCounterWiggle * .3f;
+
+						batch.PushMatrix(
+							Matrix3x2.CreateTranslation(0, -UI.IconSize / 2) * 
+							Matrix3x2.CreateScale(wiggle) *
+							Matrix3x2.CreateTranslation(at + new Vec2(offscreenPos * (1 - Ease.Cube.Out(subAreaCounterEase)), UI.IconSize / 2)));
+						UI.SubAreas(batch, Save.CurrentRecord.SubAreas.Count, Entry.SubAreaModel, new Vec2(UI.IconSize * 2 + 4, 0));
+						batch.PopMatrix();
+					}
+					at.Y += UI.IconSize + 4;
+				}
+
+				if (deathCounterEase > 0){
+					var wiggle = 1 + MathF.Sin(deathCounterWiggle * MathF.Tau * 2) * deathCounterWiggle * .3f;
+
+					batch.PushMatrix(
+						Matrix3x2.CreateTranslation(0, -UI.IconSize / 2) * 
+						Matrix3x2.CreateScale(wiggle) *
+						Matrix3x2.CreateTranslation(at + new Vec2(offscreenPos * (1 - Ease.Cube.Out(deathCounterEase)), UI.IconSize / 2)));
+					UI.Deaths(batch, Save.CurrentRecord.Deaths, Vec2.Zero);
+					batch.PopMatrix();
 					at.Y += UI.IconSize + 4;
 				}
 
 				if (IsInEndingArea || Paused)
 				{
-					UI.Deaths(batch, Save.CurrentRecord.Deaths, at);
-					at.Y += UI.IconSize + 4;
-
                     UI.Text(batch, Game.Version, bounds.BottomLeft + new Vec2(4, -4) * Game.RelativeScale, new Vec2(0, 1), Color.White * 0.25f);
                 }
 			}

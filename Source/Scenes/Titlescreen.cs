@@ -116,4 +116,6 @@ public class Titlescreen : Scene
 			batch.Clear();
 		}
     }
+
+    public override void RenderUI(Target target) {}
 }

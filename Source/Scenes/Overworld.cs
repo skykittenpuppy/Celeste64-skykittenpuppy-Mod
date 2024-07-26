@@ -402,4 +402,5 @@ public class Overworld : Scene
 			batch.Clear();
 		}
 	}
+    public override void RenderUI(Target target) {}
 }

@@ -296,9 +296,11 @@ public class Game : Module
 
 		if (transitionStep != TransitionStep.Perform && transitionStep != TransitionStep.Hold)
 		{
+			Scene? scene;
+			scenes.TryPeek(out scene);
+			
 			// draw the world to the target
-			if (scenes.TryPeek(out var scene))
-				scene.Render(target);
+			scene?.Render(target);
 
 			// draw screen wipe over top
 			if (transitionStep != TransitionStep.None && transition.ToBlack != null)
@@ -307,6 +309,10 @@ public class Game : Module
 				batcher.Render(target);
 				batcher.Clear();
 			}
+
+			// draw the UI to the target
+			scene?.RenderUI(target);
+			
 
 			// draw the target to the window
 			{

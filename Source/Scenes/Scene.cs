@@ -11,4 +11,5 @@ public abstract class Scene
 	public virtual void Disposed() {}
 	public abstract void Update();
 	public abstract void Render(Target target);
+	public abstract void RenderUI(Target target);
 }

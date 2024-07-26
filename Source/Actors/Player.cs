@@ -2016,10 +2016,11 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 		if (!Game.Instance.IsMidTransition && drawOrbsEase > 0.30f)
 		{
 			var entry = World.Entry with { Reason = World.EntryReasons.Respawned };
+			var ui = World.uiInfo;
 			Game.Instance.Goto(new Transition()
 			{
 				Mode = Transition.Modes.Replace,
-				Scene = () => new World(entry),
+				Scene = () => new World(entry, ui),
 				ToBlack = new AngledWipe()
 			});
 		}

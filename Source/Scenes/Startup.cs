@@ -84,4 +84,5 @@ public class Startup : Scene
     {
 		target.Clear(Color.Black);
     }
+    public override void RenderUI(Target target) {}
 }
